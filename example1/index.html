@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Counter - Vanilla Redux Example</title>
+    <script src="https://unpkg.com/redux@latest/dist/redux.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+    <h1>Example 1</h1>
+        <section>
+            <h2>Welcome To The Example.</h2>
+            <p>Please enjoy</p>
+            <button id="press">
+                Greetings
+            </button>
+            <button id="press2">
+                Smile
+            </button>
+            <p>
+                <strong>Results are in:</strong>  
+                <span id="msg"></span>
+            </p>
+        </section>
+    <script>
+       
+        /**
+         *  This is the initial state of our redux application.
+         **/
+         var initalState = {
+            msg: "Hello Mando" 
+        };
+
+        /**
+         * 
+         *  A redux application has to have actions.
+         * 
+         */ 
+        const SPEAK_ACTION = "SPEAK_ACTION";
+        const SMILE_ACTION = "SMILE_ACTION";
+
+        /**
+         * This object contains all the action creators for the application.
+         * 
+         */ 
+        const actionCreators = {
+
+            speak: () => {
+                return {
+
+                    type: SPEAK_ACTION,
+                    msg: "Hi, I am a function"
+
+                }
+                console.log("Hola, como esta?");
+            },
+            smile:()=> {
+
+                return {
+
+                    type: SMILE_ACTION,
+                    msg: "Smile, smile" 
+                }
+                console.log("Look at those pearly whites.");
+            }
+        };
+
+        const reducers = (state = initalState , action) => {
+
+            switch(action.type) {
+
+                case SMILE_ACTION: 
+                    return { ...state , msg: action.msg }
+
+                case SPEAK_ACTION:
+                    return { ...state , msg :action.msg }    
+                 
+                default:
+                    return state     
+
+            }
+        };
+
+        /**
+         * Now that the action creators and the reducers are done, we will create the 
+         * store. The store is where all the state magic is stored in an redux application.
+         */ 
+         const store = Redux.createStore(reducers);
+
+
+         const buttonPress = document.getElementById('press');
+         const buttonPress2 = document.getElementById('press2');
+
+          //  Dispatch the correct actions when each button is clicked
+          buttonPress.addEventListener('click', function () {
+            store.dispatch(actionCreators.speak());
+        });
+
+        buttonPress2.addEventListener('click', function () {
+            store.dispatch(actionCreators.smile());
+        });
+
+        /**
+         * Update the screen elements after the event has been dispatched.
+         * 
+         */ 
+        const updateScreen = ()=> {
+
+            let state = store.getState();
+            
+            let msgElement = document.getElementById("msg");
+
+            msgElement.innerText = state.msg;
+
+        } ;
+
+
+        store.subscribe(updateScreen);
+
+
+    </script>
+</body>
+</html>

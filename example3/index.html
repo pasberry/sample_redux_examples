@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Counter - Vanilla Redux Example</title>
+    <script src="https://unpkg.com/redux@latest/dist/redux.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+</head>
+<body>
+    <h1>The Triple Trio Third!!</h1>
+    <section>
+        <h2>This Is The Third Example.</h2>
+        <p>Let the good times roll.</p>
+    </section>
+
+   
+        <input id ="xfield" type = "number" value ="0" placeholder="0" />
+        <input id ="yfield" type = "number" value ="0" placeholder="0" />
+        <span>&nbsp;&nbsp;=&nbsp;&nbsp;</span>
+        <input id ="result" type = "number" value="" />
+
+        <br/>
+        <button id="addition" >Add</button>
+        <button id="subtract" >Subtract</button>
+        <button id="multiply" >Multiply</button>
+        <button id="divide" >Divide</button>
+        <br/>
+        <span id="errorMsg" style="color:red"></span>
+
+    <script type="module" >
+        console.log("Entering the Javascript Module Script");
+
+        import {reduxStore , processAddition, processSubtraction, processMultiplication, processDivision  } from "./reduxStore.js";
+              
+        /**
+         * This function takes the user supplied inputs and passes them to the 
+         * redux store for dispatch via the processAddition function.
+         */
+        const calculateAdd = () => {
+           
+           console.log("Entering the calculateAdd function.");
+           processFieldData(processAddition);
+           
+        }
+
+        /**
+         * This function takes the user supplied inputs and passes them
+         * to the redux store for dispatch via the processSubtraction
+         * function. 
+         * 
+         */ 
+        const calculateSubtract = () => {
+
+            console.log("Entering the calculateSubtract function.");
+            processFieldData(processSubtraction);
+
+        }
+
+        /**
+         * This function takes the user supplied inputs and passes them 
+         * to the redux store for dispatch via the processMultiplication
+         * function. 
+         * 
+         */
+        const calculateMultiple = () => {
+
+           console.log("Entering the calculateMultiple function.");
+           processFieldData(processMultiplication);
+
+        }
+
+        const calculateDivision = () => {
+
+            console.log("Entering the calculateDivision function.");
+            processFieldData(processDivision);
+        }
+
+        /**
+         *  This function is responsible for capturing the 
+         *  x and y values from the textboxes 'xfield' and 
+         *  'yfield' and calling the supplied function with
+         *  those values.
+         * 
+         */ 
+        const processFieldData = (dispatchFunction) => {
+
+            let x = document.getElementById("xfield").value; 
+            console.log("The x value is :" + x);
+
+            let y = document.getElementById("yfield").value;
+            console.log("The y value is :" + y);
+
+            dispatchFunction(x,y);
+        }
+
+        /**
+         * This function takes the current state from the reduxStore and updates 
+         * the results textbox with the new arithmitic result. 
+         * 
+         */ 
+        const sumTotal = () => {
+
+            let state = reduxStore.getState();
+
+            document.getElementById("result").value = state.total;
+
+            if(state.errorMsg){
+                document.getElementById("errorMsg").innerText = state.errorMsg;
+            } else {
+                document.getElementById("errorMsg").innerText = "";
+            }
+            
+        }
+
+        document.getElementById("addition").addEventListener("click" , calculateAdd);
+        document.getElementById("subtract").addEventListener("click" , calculateSubtract);
+        document.getElementById("multiply").addEventListener("click" , calculateMultiple);
+        document.getElementById("divide").addEventListener("click", calculateDivision);
+
+        reduxStore.subscribe(sumTotal);
+        
+    </script>
+   
+</body>
+</html>

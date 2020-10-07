@@ -1,0 +1,116 @@
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>An Awesome React Example.</title>
+        <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
+        <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+        <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>        
+    </head>
+    <body>
+        <div id="root"></div>
+    </body>
+    <script type="text/babel">
+        
+        /** the initial state of the page , this data will be loaded and maintained by the parent component. */        
+        const initialSegmentData = {
+
+            header: 'This is a React Example. Test it out below.',
+            paragraphStatement : 'Please add some descriptive text below.',
+            statementAreaPlaceholder: 'Descriptive text here. Now.'
+
+        };
+
+        /** this component is the parent component of the entire application. */ 
+        const SectionSegment = () =>{
+
+            const [segmentData , setSegmentData] = React.useState(initialSegmentData);  //represents the state of the entire app
+            const [statementValue , setStatementValue] = React.useState(""); // represents the textarea value.
+
+            const updateStatement = () => {
+
+                let paragraphStatement = statementValue;                
+                setSegmentData({...segmentData , paragraphStatement})
+
+            }
+
+            return (
+                <section>
+                    <Header statment = {segmentData.header}/>
+                    <ParagraphStatement statement = {segmentData.paragraphStatement} />
+                    <StatementWidget placeholder = {segmentData.statementAreaPlaceholder} 
+                        statementValue = {statementValue}  
+                        onStatementClick ={updateStatement}
+                        updateStatementVal = { (event) => {setStatementValue(event.target.value)}} />
+
+                </section>    
+                        
+            );
+        }
+
+        /** this component manages the textarea and the buttons that manipulate the textarea. */ 
+        const StatementWidget = ({placeholder = "Question:What's cheese thats not yours. Answer Nacho Cheese",
+            statementValue,
+            updateStatementVal = f =>f ,
+            onStatementClick = f =>f }) => {
+
+            return (
+
+                <>
+                    <StatementBox defaultPlaceholder = {placeholder} statementValue = {statementValue} updateStatementBox = {updateStatementVal} />
+                    <StatementControlPanel onStatementClick ={onStatementClick} />
+
+                </>
+            );
+        }
+
+        /* this component is a child of the StatementWidget component that is responsible for rendering and managing the buttons of the statement widget. */
+        const StatementControlPanel = ({onStatementClick = f => f}) => {
+
+            return(
+
+                <>
+                    <br/>
+                    <br/>
+                    <button id="addStatementText" onClick = {() => onStatementClick()} >Add Statement</button>
+                    <button id="clearStatementText">Clear Statement </button>
+                </>
+            );
+        }
+
+        /* this component is a child of the StatementWidget component that is responsible for rendering the textarea of StatementWidget. */
+        const StatementBox = ({defaultPlaceholder = "Default text." , 
+            statementValue = "", 
+            updateStatementBox = f =>f }) => {
+
+            return(
+                <textarea id="statementArea" rows="10" cols="50" 
+                    placeholder= {defaultPlaceholder} value = {statementValue} onChange = {() => updateStatementBox(event)}></textarea>
+            );
+        }
+
+        /* this component is ressonsible for displaying the paragraph displaying the submission from the statement area. */ 
+        const ParagraphStatement = ({statement}) => {
+
+            return (
+                <p>
+                    {statement}
+                </p>
+            );
+
+        }
+
+        /** this component is responsible for displaying the header statement of the application. */ 
+        const Header = ({statment}) => {
+
+            return(
+                <h1>{statment}</h1>
+            );
+        }
+
+      
+
+        ReactDOM.render(<SectionSegment/> , document.getElementById('root'));
+        
+
+    </script>
+</html>

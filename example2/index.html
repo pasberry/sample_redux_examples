@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Counter - Vanilla Redux Example</title>
+    <script src="https://unpkg.com/redux@latest/dist/redux.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+</head>
+<body>
+    <h1>The Double Duo Duece!!</h1>
+    <section>
+        <h2>This Is The Second Example.</h2>
+        <p>Let the good times roll.</p>
+    </section>
+
+   
+        <input id ="xfield" type = "number" value ="0" placeholder="0" />
+        <input id ="yfield" type = "number" value ="0" placeholder="0" />
+        <span>&nbsp;&nbsp;=&nbsp;&nbsp;</span>
+        <input id ="result" type = "number" value="" />
+
+        <br/>
+        <button id="addition" >Add</button>
+        <button id="subtract" >Subtract</button>
+
+    <script type="module" >
+        console.log("Entering the Javascript Module Script");
+
+        import {reduxStore , processAddition, processSubtraction  } from "./reduxStore.js";
+              
+        /**
+         * This function takes the user supplied inputs and passes them to the 
+         * redux store for dispatch via the processAddition function.
+         */
+        const calculateAdd = () => {
+           
+           console.log("Entering the calculateAdd function.");
+           //event.preventDefault();
+
+           let x = document.getElementById("xfield").value; 
+           console.log("The x value is :" + x);
+
+           let y = document.getElementById("yfield").value;
+           console.log("The y value is :" + y);
+
+           processAddition(x , y);
+
+        }
+
+        /**
+         * This function takes the user supplied inputs and passes them
+         * to the redux store for dispatch via the processSubtraction
+         * function. 
+         * 
+         */ 
+        const calculateSubtract = (event) => {
+
+            console.log("Entering the calculateSubtract function.");
+            //event.preventDefault();
+
+            let x = document.getElementById("xfield").value; 
+            console.log("The x value is :" + x);
+
+            let y = document.getElementById("yfield").value;
+            console.log("The y value is :" + y);
+
+            processSubtraction(x,y);
+
+        }
+
+        /**
+         * This function takes the current state from the reduxStore and updates 
+         * the results textbox with the new arithmitic result. 
+         * 
+         */ 
+        const sumTotal = () => {
+
+            let state = reduxStore.getState();
+
+            document.getElementById("result").value = state.total;
+            
+        }
+
+        document.getElementById("addition").addEventListener("click" , calculateAdd);
+        document.getElementById("subtract").addEventListener("click" , calculateSubtract);
+
+        reduxStore.subscribe(sumTotal);
+        
+    </script>
+   
+</body>
+</html>
